@@ -10,8 +10,8 @@ import (
 	"go.uber.org/zap"
 )
 
-// ErrHandler 中间件用于处理请求错误。
-// 如果存在错误，将返回相应的 JSON 响应。
+// ErrHandler 中间件用于处理请求错误
+// 如果存在错误，将返回相应的 JSON 响应
 func ErrHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// 向下执行请求

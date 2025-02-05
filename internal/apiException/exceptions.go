@@ -18,7 +18,6 @@ var (
 	ServerError             = NewError(200500, log.LevelError, "系统异常，请稍后重试")
 	ParamsError             = NewError(200501, log.LevelInfo, "参数错误")
 	WrongPasswordOrUsername = NewError(200502, log.LevelInfo, "用户名或密码错误")
-	UserExisted             = NewError(200503, log.LevelInfo, "用户已经存在")
 	NotFound                = NewError(200404, log.LevelWarn, http.StatusText(http.StatusNotFound))
 )
 

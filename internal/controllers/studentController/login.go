@@ -1,10 +1,10 @@
-package userController
+package studentController
 
 import (
 	"errors"
 
 	"bookcycle-server/internal/apiException"
-	"bookcycle-server/internal/services/userService"
+	"bookcycle-server/internal/services/studentService"
 	"bookcycle-server/internal/utils/jwt"
 	"bookcycle-server/internal/utils/response"
 	"github.com/gin-gonic/gin"
@@ -17,7 +17,13 @@ type loginReq struct {
 	Password string `json:"password" binding:"required"`
 }
 
-// Login 用户登录
+type loginResp struct {
+	Token     string `json:"token"`
+	Name      string `json:"name"`
+	HasLogged bool   `json:"has_logged"`
+}
+
+// Login 学生登录
 func Login(c *gin.Context) {
 	var data loginReq
 	err := c.ShouldBindJSON(&data)
@@ -25,7 +31,7 @@ func Login(c *gin.Context) {
 		response.AbortWithException(c, apiException.ParamsError, err)
 	}
 
-	user, err := userService.GetUserByUsername(data.Username)
+	user, err := studentService.GetStudentByUsername(data.Username)
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		response.AbortWithException(c, apiException.WrongPasswordOrUsername, err)
 		return
@@ -47,8 +53,10 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	zap.L().Info("用户登陆成功", zap.String("username", data.Username))
-	response.JsonSuccessResp(c, gin.H{
-		"token": token,
+	zap.L().Info("学生登录成功", zap.String("username", data.Username))
+	response.JsonSuccessResp(c, loginResp{
+		Token:     token,
+		Name:      user.Name,
+		HasLogged: user.HasLogged,
 	})
 }
