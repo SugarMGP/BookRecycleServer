@@ -46,6 +46,6 @@ func Init() {
 
 func autoMigrate(db *gorm.DB) error {
 	return db.AutoMigrate(
-		&models.Student{},
+		&models.User{},
 	)
 }

@@ -9,7 +9,3 @@ gofmt -w .
 gci write . -s standard -s default
 golangci-lint run --config .golangci.yml
 ```
-
-### 开源协议
-
-[MIT](https://github.com/zjutjh/wejh-go/blob/master/LICENSE)

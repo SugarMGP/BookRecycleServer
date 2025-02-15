@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"bookcycle-server/internal/controllers/studentController"
+	"bookcycle-server/internal/controllers/userController"
 	"github.com/gin-gonic/gin"
 )
 
@@ -9,9 +9,9 @@ import (
 func Init(r *gin.Engine) {
 	api := r.Group("/api")
 	{
-		student := api.Group("/student")
+		user := api.Group("/user")
 		{
-			student.POST("/login", studentController.Login)
+			user.POST("/login", userController.Login)
 		}
 	}
 }
