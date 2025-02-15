@@ -12,6 +12,7 @@ func Init(r *gin.Engine) {
 		user := api.Group("/user")
 		{
 			user.POST("/login", userController.Login)
+			user.POST("/register", userController.Register)
 		}
 	}
 }

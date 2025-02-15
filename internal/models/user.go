@@ -10,10 +10,9 @@ type User struct {
 	Password string // 密码
 	Type     uint   // 用户类型 1：学生 2：收书员 3：管理员
 
-	Name     string // 姓名
-	Phone    string // 联系电话
-	Campus   uint   // 校区
-	Location string // 地址
+	Name   string // 姓名
+	Phone  string // 联系电话
+	Campus uint   // 校区
 }
 
 // 校区编号

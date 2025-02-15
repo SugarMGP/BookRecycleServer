@@ -23,12 +23,13 @@ type loginResp struct {
 	Name  string `json:"name"`
 }
 
-// Login 学生登录
+// Login 用户登录
 func Login(c *gin.Context) {
 	var data loginReq
 	err := c.ShouldBindJSON(&data)
 	if err != nil {
 		response.AbortWithException(c, apiException.ParamsError, err)
+		return
 	}
 
 	user, err := userService.GetUserByUsername(data.Username)
