@@ -19,8 +19,9 @@ type loginReq struct {
 }
 
 type loginResp struct {
-	Token string `json:"token"`
-	Name  string `json:"name"`
+	Token     string `json:"token"`
+	Name      string `json:"name"`
+	Activated bool   `json:"activated"`
 }
 
 // Login 用户登录
@@ -59,7 +60,8 @@ func Login(c *gin.Context) {
 		zap.Uint("type", data.Type),
 	)
 	response.JsonSuccessResp(c, loginResp{
-		Token: token,
-		Name:  user.Name,
+		Token:     token,
+		Name:      user.Name,
+		Activated: user.StudentID != "",
 	})
 }

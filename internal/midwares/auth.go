@@ -19,6 +19,7 @@ func Auth(c *gin.Context) {
 		return
 	}
 
+	token = token[7:] // 去除 Bearer
 	claims, err := jwt.ParseToken(token)
 	if errors.Is(err, jwt.ErrTokenHandlingFailed) {
 		response.AbortWithException(c, apiException.ServerError, err)
