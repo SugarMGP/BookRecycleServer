@@ -3,7 +3,7 @@ package apiException
 import (
 	"net/http"
 
-	"bookcycle-server/pkg/log"
+	"bookrecycle-server/pkg/log"
 )
 
 // Error 自定义错误类型

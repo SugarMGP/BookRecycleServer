@@ -3,7 +3,7 @@ package log
 import (
 	"log"
 
-	"bookcycle-server/pkg/config"
+	"bookrecycle-server/pkg/config"
 	"github.com/zjutjh/WeJH-SDK/zapHelper"
 	"go.uber.org/zap"
 )

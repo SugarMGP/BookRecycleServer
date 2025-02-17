@@ -3,10 +3,10 @@ package userController
 import (
 	"errors"
 
-	"bookcycle-server/internal/apiException"
-	"bookcycle-server/internal/services/userService"
-	"bookcycle-server/internal/utils/jwt"
-	"bookcycle-server/internal/utils/response"
+	"bookrecycle-server/internal/apiException"
+	"bookrecycle-server/internal/services/userService"
+	"bookrecycle-server/internal/utils/jwt"
+	"bookrecycle-server/internal/utils/response"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"gorm.io/gorm"

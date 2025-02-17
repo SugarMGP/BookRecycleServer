@@ -4,7 +4,7 @@ import (
 	"errors"
 	"time"
 
-	"bookcycle-server/pkg/config"
+	"bookrecycle-server/pkg/config"
 	"github.com/golang-jwt/jwt/v5"
 )
 

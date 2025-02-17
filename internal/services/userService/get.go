@@ -1,8 +1,8 @@
 package userService
 
 import (
-	"bookcycle-server/internal/models"
-	"bookcycle-server/pkg/database"
+	"bookrecycle-server/internal/models"
+	"bookrecycle-server/pkg/database"
 )
 
 // GetUserByUsername 通过用户名获取用户

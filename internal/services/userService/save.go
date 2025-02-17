@@ -1,8 +1,8 @@
 package userService
 
 import (
-	"bookcycle-server/internal/models"
-	"bookcycle-server/pkg/database"
+	"bookrecycle-server/internal/models"
+	"bookrecycle-server/pkg/database"
 )
 
 // SaveUser 创建用户

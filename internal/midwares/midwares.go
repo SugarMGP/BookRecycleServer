@@ -4,8 +4,8 @@ import (
 	"errors"
 	"net/http"
 
-	"bookcycle-server/internal/apiException"
-	"bookcycle-server/internal/utils/response"
+	"bookrecycle-server/internal/apiException"
+	"bookrecycle-server/internal/utils/response"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )

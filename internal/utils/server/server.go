@@ -9,7 +9,7 @@ import (
 	"syscall"
 	"time"
 
-	"bookcycle-server/pkg/redis"
+	"bookrecycle-server/pkg/redis"
 	"go.uber.org/zap"
 )
 

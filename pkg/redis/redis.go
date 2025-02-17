@@ -1,7 +1,7 @@
 package redis
 
 import (
-	"bookcycle-server/pkg/config"
+	"bookrecycle-server/pkg/config"
 	"github.com/redis/go-redis/v9"
 	"github.com/zjutjh/WeJH-SDK/redisHelper"
 	"go.uber.org/zap"

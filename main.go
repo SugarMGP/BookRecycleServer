@@ -1,13 +1,13 @@
 package main
 
 import (
-	"bookcycle-server/internal/midwares"
-	"bookcycle-server/internal/routes"
-	"bookcycle-server/internal/utils/server"
-	"bookcycle-server/pkg/config"
-	"bookcycle-server/pkg/database"
-	"bookcycle-server/pkg/log"
-	"bookcycle-server/pkg/redis"
+	"bookrecycle-server/internal/midwares"
+	"bookrecycle-server/internal/routes"
+	"bookrecycle-server/internal/utils/server"
+	"bookrecycle-server/pkg/config"
+	"bookrecycle-server/pkg/database"
+	"bookrecycle-server/pkg/log"
+	"bookrecycle-server/pkg/redis"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )

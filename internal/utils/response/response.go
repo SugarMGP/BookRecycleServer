@@ -3,8 +3,8 @@ package response
 import (
 	"net/http"
 
-	"bookcycle-server/internal/apiException"
-	"bookcycle-server/pkg/log"
+	"bookrecycle-server/internal/apiException"
+	"bookrecycle-server/pkg/log"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )

@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"bookcycle-server/internal/controllers/userController"
+	"bookrecycle-server/internal/controllers/userController"
 	"github.com/gin-gonic/gin"
 )
 

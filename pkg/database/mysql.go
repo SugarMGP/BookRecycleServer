@@ -3,8 +3,8 @@ package database
 import (
 	"fmt"
 
-	"bookcycle-server/internal/models"
-	"bookcycle-server/pkg/config"
+	"bookrecycle-server/internal/models"
+	"bookrecycle-server/pkg/config"
 	"go.uber.org/zap"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"

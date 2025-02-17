@@ -1,4 +1,4 @@
-module bookcycle-server
+module bookrecycle-server
 
 go 1.22.9
 
