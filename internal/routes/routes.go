@@ -2,6 +2,7 @@ package routes
 
 import (
 	"bookrecycle-server/internal/controllers/userController"
+	"bookrecycle-server/internal/midwares"
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,6 +14,7 @@ func Init(r *gin.Engine) {
 		{
 			user.POST("/login", userController.Login)
 			user.POST("/register", userController.Register)
+			user.POST("/activate", midwares.Auth, userController.Activate)
 		}
 	}
 }

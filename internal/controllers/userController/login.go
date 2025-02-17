@@ -32,7 +32,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	user, err := userService.GetUserByUsername(data.Username)
+	user, err := userService.GetUserByUsernameAndType(data.Username, data.Type)
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		response.AbortWithException(c, apiException.WrongPasswordOrUsername, err)
 		return

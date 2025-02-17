@@ -16,9 +16,6 @@ import (
 type registerReq struct {
 	Username string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
-	Name     string `json:"name" binding:"required"`
-	Phone    string `json:"phone" binding:"required"`
-	Campus   uint   `json:"campus" binding:"required"`
 	Type     uint   `json:"type" binding:"required"`
 }
 
@@ -28,6 +25,12 @@ func Register(c *gin.Context) {
 	err := c.ShouldBindJSON(&data)
 	if err != nil {
 		response.AbortWithException(c, apiException.ParamsError, err)
+		return
+	}
+
+	// 类型校验
+	if data.Type > 3 || data.Type < 1 {
+		response.AbortWithException(c, apiException.ParamsError, nil)
 		return
 	}
 
@@ -43,14 +46,8 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	// 校验校区信息
-	if data.Campus > 3 || data.Campus < 1 {
-		response.AbortWithException(c, apiException.ParamsError, nil)
-		return
-	}
-
 	// 判断用户是否已经注册
-	_, err = userService.GetUserByUsername(data.Username)
+	_, err = userService.GetUserByUsernameAndType(data.Username, data.Type)
 	if err == nil {
 		response.AbortWithException(c, apiException.UserAlreadyExist, err)
 		return
@@ -65,9 +62,6 @@ func Register(c *gin.Context) {
 		Username: data.Username,
 		Password: data.Password,
 		Type:     data.Type,
-		Name:     data.Name,
-		Phone:    data.Phone,
-		Campus:   data.Campus,
 	})
 	if err != nil {
 		response.AbortWithException(c, apiException.ServerError, err)
