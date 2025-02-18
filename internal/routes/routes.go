@@ -16,6 +16,7 @@ func Init(r *gin.Engine) {
 			user.POST("/login", userController.Login)
 			user.POST("/register", userController.Register)
 			user.POST("/activate", midwares.Auth, userController.Activate)
+			user.GET("/info", midwares.Auth, userController.GetUserInfo)
 		}
 	}
 	r.GET("/ws", midwares.Auth, ws.HandleWebSocket)
