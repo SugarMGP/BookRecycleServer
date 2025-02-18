@@ -7,7 +7,7 @@ import (
 	"bookrecycle-server/pkg/config"
 	"bookrecycle-server/pkg/database"
 	"bookrecycle-server/pkg/log"
-	"bookrecycle-server/pkg/redis"
+	"bookrecycle-server/pkg/ws"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
@@ -24,7 +24,7 @@ func main() {
 	r.NoRoute(midwares.HandleNotFound)
 	log.Init()
 	database.Init()
-	redis.Init()
+	ws.Init()
 	routes.Init(r)
 
 	server.Run(r, ":"+config.Config.GetString("server.port"))

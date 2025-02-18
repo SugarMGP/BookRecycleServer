@@ -3,6 +3,7 @@ package routes
 import (
 	"bookrecycle-server/internal/controllers/userController"
 	"bookrecycle-server/internal/midwares"
+	"bookrecycle-server/pkg/ws"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,4 +18,5 @@ func Init(r *gin.Engine) {
 			user.POST("/activate", midwares.Auth, userController.Activate)
 		}
 	}
+	r.GET("/ws", midwares.Auth, ws.HandleWebSocket)
 }

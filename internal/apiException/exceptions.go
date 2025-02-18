@@ -22,6 +22,7 @@ var (
 	InvalidUsername         = NewError(200504, log.LevelInfo, "用户名不合法")
 	InvalidPassword         = NewError(200505, log.LevelInfo, "密码不合法")
 	NoAccessPermission      = NewError(200506, log.LevelInfo, "无访问权限")
+	WebSocketError          = NewError(200507, log.LevelWarn, "WebSocket连接错误")
 	NotFound                = NewError(200404, log.LevelWarn, http.StatusText(http.StatusNotFound))
 )
 
