@@ -9,7 +9,7 @@ import (
 	"syscall"
 	"time"
 
-	"bookrecycle-server/pkg/redis"
+	"bookrecycle-server/pkg/ws"
 	"go.uber.org/zap"
 )
 
@@ -35,16 +35,13 @@ func Run(handler http.Handler, addr string) {
 
 	zap.L().Info("Shutdown server...")
 
+	ws.Stop()
+
 	// 关闭服务器（5秒超时时间）
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	if err := srv.Shutdown(ctx); err != nil {
 		zap.L().Error("Server shutdown failed", zap.Error(err))
-	}
-
-	// 关闭 Redis 客户端
-	if err := redis.GlobalClient.Close(); err != nil {
-		zap.L().Error("Redis shutdown failed", zap.Error(err))
 	}
 
 	zap.L().Info("Server closed")

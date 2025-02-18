@@ -4,8 +4,11 @@ import (
 	"encoding/json"
 	"net/http"
 	"sync"
+	"time"
 
 	"bookrecycle-server/internal/apiException"
+	"bookrecycle-server/internal/models"
+	"bookrecycle-server/internal/services/messageService"
 	"bookrecycle-server/internal/utils"
 	"bookrecycle-server/internal/utils/response"
 	"github.com/gin-gonic/gin"
@@ -13,8 +16,7 @@ import (
 	"go.uber.org/zap"
 )
 
-// CM 全局连接管理器
-var CM *ConnectionManager
+var cm *ConnectionManager
 
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
@@ -24,43 +26,30 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
-// Connection 用户连接
-type Connection struct {
-	Conn   *websocket.Conn
-	UserID uint
-	*sync.Mutex
-}
+func (cm *ConnectionManager) handleMessage(message *models.Message) {
+	// 保存消息到数据库
+	if err := messageService.SaveMessage(*message); err != nil {
+		zap.L().Warn("Error saving message to database", zap.Error(err))
+		return
+	}
 
-// ConnectionManager 连接管理器
-type ConnectionManager struct {
-	connections     map[uint]*Connection
-	offlineMessages map[uint][]*Message
-	mutex           sync.RWMutex
-	userChannel     chan []byte
-}
-
-// Message 消息结构体
-type Message struct {
-	Sender   uint   `json:"sender"`
-	Receiver uint   `json:"receiver"`
-	Content  string `json:"content"`
-}
-
-func (cm *ConnectionManager) handleMessage(message *Message) {
 	cm.mutex.RLock()
 	receiverConn, exists := cm.connections[message.Receiver]
+	senderConn, senderExists := cm.connections[message.Sender]
 	cm.mutex.RUnlock()
 
+	// 发送给接收者
 	if exists {
-		// 如果接收者在线，直接发送消息
 		if err := receiverConn.Conn.WriteJSON(*message); err != nil {
 			zap.L().Warn("Error writing message", zap.Error(err))
 		}
-	} else {
-		// 如果接收者不在线，存储消息
-		cm.mutex.Lock()
-		cm.offlineMessages[message.Receiver] = append(cm.offlineMessages[message.Receiver], message)
-		cm.mutex.Unlock()
+	}
+
+	// 发送给自己
+	if senderExists {
+		if err := senderConn.Conn.WriteJSON(*message); err != nil {
+			zap.L().Warn("Error writing message", zap.Error(err))
+		}
 	}
 }
 
@@ -71,15 +60,15 @@ func (cm *ConnectionManager) registerConnection(conn *websocket.Conn, uid uint) 
 		UserID: uid,
 		Mutex:  &sync.Mutex{},
 	}
-	// 检查是否有离线消息
-	if messages, exists := cm.offlineMessages[uid]; exists {
-		for _, msg := range messages {
-			if err := conn.WriteJSON(*msg); err != nil {
-				zap.L().Warn("Error sending offline message", zap.Error(err))
-			}
+
+	messages, err := messageService.GetMessagesByUser(uid)
+	if err != nil {
+		zap.L().Warn("Error getting messages", zap.Error(err))
+	}
+	for _, msg := range messages {
+		if err := conn.WriteJSON(msg); err != nil {
+			zap.L().Warn("Error sending history message", zap.Error(err))
 		}
-		// 清除离线消息队列
-		delete(cm.offlineMessages, uid)
 	}
 	cm.mutex.Unlock()
 }
@@ -90,27 +79,32 @@ func (cm *ConnectionManager) unregisterConnection(uid uint) {
 	cm.mutex.Unlock()
 }
 
-// Init 初始化连接管理器
+// Init 初始化
 func Init() {
 	// 初始化连接管理器
-	CM = &ConnectionManager{
-		connections:     make(map[uint]*Connection),
-		offlineMessages: make(map[uint][]*Message),
-		userChannel:     make(chan []byte),
+	cm = &ConnectionManager{
+		connections: make(map[uint]*Connection),
+		userChannel: make(chan []byte),
+		stop:        false,
 	}
 
 	// 启动消息处理协程
 	go func() {
-		for {
-			msg := <-CM.userChannel
-			var message Message
+		for !cm.stop {
+			msg := <-cm.userChannel
+			var message models.Message
 			if err := json.Unmarshal(msg, &message); err != nil {
 				zap.L().Warn("Error unmarshaling message", zap.Error(err))
 				continue
 			}
-			CM.handleMessage(&message)
+			cm.handleMessage(&message)
 		}
 	}()
+}
+
+// Stop 停止消息处理
+func Stop() {
+	cm.stop = true
 }
 
 // HandleWebSocket 处理 WebSocket 请求
@@ -133,17 +127,32 @@ func HandleWebSocket(c *gin.Context) {
 		}
 	}(conn)
 
-	CM.registerConnection(conn, user.ID)
+	cm.registerConnection(conn, user.ID)
 
 	for {
 		msgType, msg, err := conn.ReadMessage()
 		if err != nil {
-			CM.unregisterConnection(user.ID)
+			cm.unregisterConnection(user.ID)
 			break
 		}
 
 		if msgType == websocket.TextMessage {
-			CM.userChannel <- msg
+			var message models.Message
+			if err := json.Unmarshal(msg, &message); err != nil {
+				zap.L().Warn("Error unmarshaling message", zap.Error(err))
+				continue
+			}
+
+			// 填充信息
+			message.Sender = user.ID
+			message.CreatedAt = time.Now()
+
+			msg, err = json.Marshal(message)
+			if err != nil {
+				zap.L().Warn("Error marshaling message", zap.Error(err))
+				continue
+			}
+			cm.userChannel <- msg
 		}
 	}
 }
