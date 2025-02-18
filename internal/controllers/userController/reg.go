@@ -9,7 +9,6 @@ import (
 	"bookrecycle-server/internal/services/userService"
 	"bookrecycle-server/internal/utils/response"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
 
@@ -68,10 +67,6 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	zap.L().Info("用户注册成功",
-		zap.String("username", data.Username),
-		zap.Uint("type", data.Type),
-	)
 	response.JsonSuccessResp(c, nil)
 }
 

@@ -8,7 +8,6 @@ import (
 	"bookrecycle-server/internal/utils/jwt"
 	"bookrecycle-server/internal/utils/response"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
 
@@ -55,10 +54,6 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	zap.L().Info("用户登录成功",
-		zap.String("username", data.Username),
-		zap.Uint("type", data.Type),
-	)
 	response.JsonSuccessResp(c, loginResp{
 		Token:     token,
 		Name:      user.Name,

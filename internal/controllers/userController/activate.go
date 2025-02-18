@@ -6,7 +6,6 @@ import (
 	"bookrecycle-server/internal/utils"
 	"bookrecycle-server/internal/utils/response"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 type activateReq struct {
@@ -38,8 +37,7 @@ func Activate(c *gin.Context) {
 		return
 	}
 
-	// 更新用户信息
-	{
+	{ // 更新用户信息
 		user.Address = data.Address
 		user.Campus = data.Campus
 		user.Name = data.Name
@@ -53,6 +51,5 @@ func Activate(c *gin.Context) {
 		return
 	}
 
-	zap.L().Info("学生激活成功", zap.Uint("user_id", user.ID))
 	response.JsonSuccessResp(c, nil)
 }
