@@ -13,6 +13,7 @@ type billElement struct {
 }
 
 type infoResp struct {
+	ID         uint          `json:"id"`
 	Name       string        `json:"name"`
 	StudentID  string        `json:"student_id"`
 	Phone      string        `json:"phone"`
@@ -31,6 +32,7 @@ func GetUserInfo(c *gin.Context) {
 
 	// TODO 钱款相关信息
 	response.JsonSuccessResp(c, infoResp{
+		ID:         user.ID,
 		Name:       user.Name,
 		StudentID:  user.StudentID,
 		Phone:      user.Phone,

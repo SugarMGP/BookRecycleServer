@@ -31,12 +31,6 @@ func Activate(c *gin.Context) {
 		return
 	}
 
-	// 判断是否为学生
-	if user.Type != 1 {
-		response.AbortWithException(c, apiException.NoAccessPermission, nil)
-		return
-	}
-
 	// 判断校区信息是否合法
 	if data.Campus > 3 || data.Campus < 1 {
 		response.AbortWithException(c, apiException.ParamsError, nil)
