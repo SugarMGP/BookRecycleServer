@@ -37,6 +37,12 @@ func Activate(c *gin.Context) {
 		return
 	}
 
+	// 判断校区信息是否合法
+	if data.Campus > 3 || data.Campus < 1 {
+		response.AbortWithException(c, apiException.ParamsError, nil)
+		return
+	}
+
 	{ // 更新用户信息
 		user.Address = data.Address
 		user.Campus = data.Campus

@@ -16,10 +16,3 @@ type User struct {
 	Campus    uint   // 校区
 	Address   string // 地址
 }
-
-// 校区编号
-const (
-	CampusZH uint = iota + 1
-	CampusPF
-	CampusMGS
-)
