@@ -31,5 +31,5 @@ func Init(r *gin.Engine) {
 		}
 		api.POST("/upload", midwares.Auth(), objectController.UploadFile)
 	}
-	r.GET("/ws", midwares.Auth(), ws.HandleWebSocket)
+	r.GET("/ws", ws.HandleWebSocket)
 }

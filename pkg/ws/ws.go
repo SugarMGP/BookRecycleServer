@@ -1,6 +1,7 @@
 package ws
 
 import (
+	"bookrecycle-server/internal/utils/jwt"
 	"encoding/json"
 	"net/http"
 	"sync"
@@ -10,7 +11,6 @@ import (
 	"bookrecycle-server/internal/apiException"
 	"bookrecycle-server/internal/models"
 	"bookrecycle-server/internal/services/messageService"
-	"bookrecycle-server/internal/utils"
 	"bookrecycle-server/internal/utils/response"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
@@ -122,12 +122,13 @@ func Stop() {
 
 // HandleWebSocket 处理 WebSocket 请求
 func HandleWebSocket(c *gin.Context) {
-	user, err := utils.GetUser(c)
+	token := c.Query("token")
+	claims, err := jwt.ParseToken(token)
 	if err != nil {
 		response.AbortWithException(c, apiException.ServerError, err)
 		return
 	}
-
+	userid := claims.UserID
 	conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
 		response.AbortWithException(c, apiException.WebSocketError, err)
@@ -140,11 +141,11 @@ func HandleWebSocket(c *gin.Context) {
 		}
 	}(conn)
 
-	cm.registerConnection(conn, user.ID)
+	cm.registerConnection(conn, userid)
 	for {
 		msgType, msg, err := conn.ReadMessage()
 		if err != nil {
-			cm.unregisterConnection(user.ID)
+			cm.unregisterConnection(userid)
 			break
 		}
 
@@ -156,7 +157,7 @@ func HandleWebSocket(c *gin.Context) {
 			}
 
 			// 填充信息
-			message.Sender = user.ID
+			message.Sender = userid
 			message.CreatedAt = time.Now()
 
 			if message.Sender == message.Receiver {
