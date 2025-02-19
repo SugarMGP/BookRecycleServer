@@ -16,9 +16,7 @@ type uploadBookReq struct {
 	Edition      string `json:"edition" binding:"required"`
 	Publisher    string `json:"publisher" binding:"required"`
 	Completeness string `json:"completeness" binding:"required"`
-	Img1         string `json:"img1" binding:"required"`
-	Img2         string `json:"img2"`
-	Img3         string `json:"img3"`
+	Img          string `json:"img" binding:"required"`
 	Price        string `json:"price" binding:"required"`
 	Note         string `json:"note" binding:"required"`
 }
@@ -51,9 +49,7 @@ func UploadBook(c *gin.Context) {
 		Edition:      data.Edition,
 		Publisher:    data.Publisher,
 		Completeness: data.Completeness,
-		Img1:         data.Img1,
-		Img2:         data.Img2,
-		Img3:         data.Img3,
+		Img:          data.Img,
 		Price:        price.StringFixedBank(2),
 		Note:         data.Note,
 	})

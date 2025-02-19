@@ -11,9 +11,7 @@ type Book struct {
 	Edition      string // 版次
 	Publisher    string // 出版社
 	Completeness string // 完好程度
-	Img1         string // 封面图
-	Img2         string
-	Img3         string
+	Img          string // 图片
 	Price        string // 价格
 	Note         string // 备注
 }
