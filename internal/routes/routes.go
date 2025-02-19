@@ -27,6 +27,7 @@ func Init(r *gin.Engine) {
 				market.POST("/upload", bookController.UploadBook)
 				market.GET("/products", bookController.GetBookList)
 			}
+			student.GET("/books", bookController.GetMyBookList)
 		}
 		api.POST("/upload", midwares.Auth(), objectController.UploadFile)
 	}

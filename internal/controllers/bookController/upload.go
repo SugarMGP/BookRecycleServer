@@ -52,6 +52,7 @@ func UploadBook(c *gin.Context) {
 		Img:          data.Img,
 		Price:        price.StringFixedBank(2),
 		Note:         data.Note,
+		Status:       1,
 	})
 	if err != nil {
 		response.AbortWithException(c, apiException.ServerError, err)

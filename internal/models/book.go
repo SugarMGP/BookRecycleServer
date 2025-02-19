@@ -14,4 +14,5 @@ type Book struct {
 	Img          string // 图片
 	Price        string // 价格
 	Note         string // 备注
+	Status       uint   // 状态 1已上架 2已售出
 }
