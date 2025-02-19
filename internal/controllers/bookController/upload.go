@@ -12,13 +12,13 @@ import (
 
 type uploadBookReq struct {
 	Name         string `json:"name" binding:"required"`
-	Course       string `json:"course" binding:"required"`
-	Edition      string `json:"edition" binding:"required"`
+	Course       string `json:"course"`
+	Edition      string `json:"edition"`
 	Publisher    string `json:"publisher" binding:"required"`
 	Completeness string `json:"completeness" binding:"required"`
 	Img          string `json:"img" binding:"required"`
 	Price        string `json:"price" binding:"required"`
-	Note         string `json:"note" binding:"required"`
+	Note         string `json:"note"`
 }
 
 // UploadBook 上传书籍
