@@ -13,7 +13,7 @@ func GetMessagesByUser(user uint) ([]models.Message, error) {
 }
 
 // SaveMessage 保存聊天消息
-func SaveMessage(message models.Message) error {
-	result := database.DB.Create(&message)
+func SaveMessage(message *models.Message) error {
+	result := database.DB.Create(message)
 	return result.Error
 }

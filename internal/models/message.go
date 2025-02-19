@@ -6,7 +6,7 @@ import (
 
 // Message 消息结构体
 type Message struct {
-	ID        uint   `json:"-"`
+	ID        uint   `json:"id"`
 	Sender    uint   `json:"sender"`
 	Receiver  uint   `json:"receiver"`
 	Content   string `json:"content"`
