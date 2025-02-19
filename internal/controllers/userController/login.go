@@ -19,6 +19,7 @@ type loginReq struct {
 
 type loginResp struct {
 	Token     string `json:"token"`
+	UserID    uint   `json:"user_id"`
 	Name      string `json:"name"`
 	Activated bool   `json:"activated"`
 }
@@ -56,6 +57,7 @@ func Login(c *gin.Context) {
 
 	response.JsonSuccessResp(c, loginResp{
 		Token:     token,
+		UserID:    user.ID,
 		Name:      user.Name,
 		Activated: user.StudentID != "",
 	})

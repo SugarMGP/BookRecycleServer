@@ -1,6 +1,7 @@
 package ws
 
 import (
+	"bookrecycle-server/internal/services/userService"
 	"bookrecycle-server/internal/utils/jwt"
 	"encoding/json"
 	"net/http"
@@ -35,6 +36,12 @@ type ConnectionManager struct {
 	stop        atomic.Bool
 }
 
+type messageResp struct {
+	models.Message
+	SenderName   string `json:"sender_name"`
+	ReceiverName string `json:"receiver_name"`
+}
+
 func (cm *ConnectionManager) handleMessage(message *models.Message) {
 	// 保存消息到数据库
 	if err := messageService.SaveMessage(message); err != nil {
@@ -47,9 +54,25 @@ func (cm *ConnectionManager) handleMessage(message *models.Message) {
 	senderConn, senderExists := cm.connections[message.Sender]
 	cm.mutex.RUnlock()
 
+	sender, err := userService.GetUserByID(message.Sender)
+	if err != nil {
+		zap.L().Warn("Error get user from database", zap.Error(err))
+		return
+	}
+
+	receiver, err := userService.GetUserByID(message.Receiver)
+	if err != nil {
+		zap.L().Warn("Error get user from database", zap.Error(err))
+		return
+	}
+	resp := messageResp{
+		*message,
+		sender.Name,
+		receiver.Name,
+	}
 	// 发送给接收者
 	if exists {
-		if err := receiverConn.WriteJSON(*message); err != nil {
+		if err := receiverConn.WriteJSON(resp); err != nil {
 			zap.L().Warn("Error writing message", zap.Error(err))
 			_ = receiverConn.Close()
 			cm.unregisterConnection(message.Receiver)
@@ -58,7 +81,7 @@ func (cm *ConnectionManager) handleMessage(message *models.Message) {
 
 	// 发送给自己
 	if senderExists {
-		if err := senderConn.WriteJSON(*message); err != nil {
+		if err := senderConn.WriteJSON(resp); err != nil {
 			zap.L().Warn("Error writing message", zap.Error(err))
 			_ = senderConn.Close()
 			cm.unregisterConnection(message.Sender)
@@ -78,7 +101,23 @@ func (cm *ConnectionManager) registerConnection(conn *websocket.Conn, uid uint) 
 	cm.connections[uid] = conn
 	cm.mutex.Unlock()
 	for _, msg := range messages {
-		if err := conn.WriteJSON(msg); err != nil {
+		sender, err := userService.GetUserByID(msg.Sender)
+		if err != nil {
+			zap.L().Warn("Error get user from database", zap.Error(err))
+			continue
+		}
+
+		receiver, err := userService.GetUserByID(msg.Receiver)
+		if err != nil {
+			zap.L().Warn("Error get user from database", zap.Error(err))
+			continue
+		}
+		resp := messageResp{
+			msg,
+			sender.Name,
+			receiver.Name,
+		}
+		if err := conn.WriteJSON(resp); err != nil {
 			zap.L().Warn("Error sending history message", zap.Error(err))
 		}
 	}
