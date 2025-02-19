@@ -2,15 +2,21 @@ module bookrecycle-server
 
 go 1.22.9
 
+replace github.com/chai2010/webp => github.com/chirino/webp v0.0.0-20240906184250-8b3bed1ecc92
+
 require (
+	github.com/chai2010/webp v1.1.1
+	github.com/dustin/go-humanize v1.0.1
 	github.com/gin-contrib/cors v1.7.3
 	github.com/gin-gonic/gin v1.10.0
 	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/gorilla/websocket v1.5.3
 	github.com/redis/go-redis/v9 v9.7.0
+	github.com/satori/go.uuid v1.2.0
 	github.com/spf13/viper v1.19.0
 	github.com/zjutjh/WeJH-SDK v0.2.1
 	go.uber.org/zap v1.27.0
+	golang.org/x/image v0.24.0
 	gorm.io/driver/mysql v1.5.7
 	gorm.io/gorm v1.25.12
 )
