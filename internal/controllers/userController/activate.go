@@ -43,6 +43,7 @@ func Activate(c *gin.Context) {
 		user.Name = data.Name
 		user.Phone = data.Phone
 		user.StudentID = data.StudentID
+		user.Activated = true
 	}
 
 	err = userService.SaveUser(user)

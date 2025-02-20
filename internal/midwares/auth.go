@@ -32,6 +32,11 @@ func Auth(usertype ...uint) gin.HandlerFunc {
 			return
 		}
 
+		if !user.Activated {
+			response.AbortWithException(c, apiException.NoAccessPermission, nil)
+			return
+		}
+
 		// 判断用户类型
 		if len(usertype) != 0 {
 			flag := false

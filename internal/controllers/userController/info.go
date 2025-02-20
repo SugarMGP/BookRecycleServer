@@ -17,6 +17,8 @@ type infoResp struct {
 	Name       string        `json:"name"`
 	StudentID  string        `json:"student_id"`
 	Phone      string        `json:"phone"`
+	Campus     uint          `json:"campus"`
+	Address    string        `json:"address"`
 	Balance    string        `json:"balance"`
 	Reputation uint          `json:"reputation"`
 	Bill       []billElement `json:"bill"`
@@ -36,6 +38,8 @@ func GetUserInfo(c *gin.Context) {
 		Name:       user.Name,
 		StudentID:  user.StudentID,
 		Phone:      user.Phone,
+		Campus:     user.Campus,
+		Address:    user.Address,
 		Balance:    "",
 		Reputation: 0,
 		Bill:       nil,

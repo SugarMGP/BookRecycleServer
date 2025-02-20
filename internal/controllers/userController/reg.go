@@ -58,9 +58,10 @@ func Register(c *gin.Context) {
 
 	// 注册用户
 	err = userService.SaveUser(&models.User{
-		Username: data.Username,
-		Password: data.Password,
-		Type:     data.Type,
+		Username:  data.Username,
+		Password:  data.Password,
+		Type:      data.Type,
+		Activated: false,
 	})
 	if err != nil {
 		response.AbortWithException(c, apiException.ServerError, err)

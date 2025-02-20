@@ -59,6 +59,6 @@ func Login(c *gin.Context) {
 		Token:     token,
 		UserID:    user.ID,
 		Name:      user.Name,
-		Activated: user.StudentID != "",
+		Activated: user.Activated,
 	})
 }

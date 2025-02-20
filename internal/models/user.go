@@ -6,9 +6,10 @@ import "gorm.io/gorm"
 type User struct {
 	gorm.Model
 
-	Username string // 用户名
-	Password string // 密码
-	Type     uint   // 用户类型 1：学生 2：收书员 3：管理员
+	Username  string // 用户名
+	Password  string // 密码
+	Type      uint   // 用户类型 1：学生 2：收书员 3：管理员
+	Activated bool   // 是否激活
 
 	Name      string // 姓名
 	StudentID string // 学号
