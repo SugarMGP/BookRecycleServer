@@ -2,6 +2,7 @@ package routes
 
 import (
 	"bookrecycle-server/internal/controllers/bookController"
+	"bookrecycle-server/internal/controllers/feedbackController"
 	"bookrecycle-server/internal/controllers/objectController"
 	"bookrecycle-server/internal/controllers/userController"
 	"bookrecycle-server/internal/midwares"
@@ -30,6 +31,7 @@ func Init(r *gin.Engine) {
 				market.PUT("/book", bookController.UpdateBook)
 				market.DELETE("/book", bookController.DeleteBook)
 			}
+			student.POST("/feedback", feedbackController.Feedback)
 		}
 		api.POST("/upload", midwares.Auth(), objectController.UploadFile)
 	}
