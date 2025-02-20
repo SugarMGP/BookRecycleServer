@@ -37,7 +37,7 @@ type ConnectionManager struct {
 
 func (cm *ConnectionManager) handleMessage(message *models.Message) {
 	// 保存消息到数据库
-	if err := messageService.SaveMessage(message); err != nil {
+	if err := messageService.CreateMessage(message); err != nil {
 		zap.L().Warn("Error saving message to database", zap.Error(err))
 		return
 	}

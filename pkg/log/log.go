@@ -11,7 +11,7 @@ import (
 // Init 初始化日志
 func Init() {
 	zapInfo := zapHelper.InfoConfig{
-		StacktraceLevel:   "warn",
+		StacktraceLevel:   "error",
 		DisableStacktrace: config.Config.GetBool("log.disableStacktrace"), // 是否禁用堆栈跟踪
 		ConsoleLevel:      config.Config.GetString("log.level"),           // 日志级别
 		Name:              config.Config.GetString("log.name"),            // 日志名称

@@ -5,8 +5,8 @@ import (
 	"bookrecycle-server/pkg/database"
 )
 
-// SaveBook 保存书籍信息
-func SaveBook(book *models.Book) error {
-	result := database.DB.Save(book)
+// DeleteBook 删除书籍
+func DeleteBook(id uint) error {
+	result := database.DB.Where("id = ?", id).Delete(&models.Book{})
 	return result.Error
 }

@@ -45,7 +45,7 @@ func Activate(c *gin.Context) {
 		user.StudentID = data.StudentID
 	}
 
-	err = userService.SaveUser(*user)
+	err = userService.SaveUser(user)
 	if err != nil {
 		response.AbortWithException(c, apiException.ServerError, err)
 		return

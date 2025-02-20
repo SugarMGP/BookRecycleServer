@@ -42,7 +42,7 @@ func UploadBook(c *gin.Context) {
 		return
 	}
 
-	err = bookService.SaveBook(models.Book{
+	err = bookService.SaveBook(&models.Book{
 		UserID:       user.ID,
 		Name:         data.Name,
 		Course:       data.Course,

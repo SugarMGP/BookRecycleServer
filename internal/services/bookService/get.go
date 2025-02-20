@@ -25,3 +25,10 @@ func GetMyBookList(uid uint) ([]models.Book, error) {
 	result := database.DB.Where("user_id = ?", uid).Order("id desc").Find(&books)
 	return books, result.Error
 }
+
+// GetBookByID 根据ID获取书籍
+func GetBookByID(id uint) (*models.Book, error) {
+	var book models.Book
+	result := database.DB.Where("id = ?", id).First(&book)
+	return &book, result.Error
+}

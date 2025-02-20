@@ -26,6 +26,7 @@ var (
 	FileSizeExceedError     = NewError(200508, log.LevelInfo, "文件大小超限")
 	UploadFileError         = NewError(200509, log.LevelError, "上传文件失败")
 	FileNotImageError       = NewError(200510, log.LevelInfo, "上传的文件不是图片")
+	ResourceNotFound        = NewError(200511, log.LevelInfo, "资源不存在")
 	NotFound                = NewError(200404, log.LevelWarn, http.StatusText(http.StatusNotFound))
 )
 
