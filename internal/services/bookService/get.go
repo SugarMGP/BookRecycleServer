@@ -34,3 +34,22 @@ func GetBookByID(id uint) (*models.Book, error) {
 	result := database.DB.Where("id = ?", id).First(&book)
 	return &book, result.Error
 }
+
+// GetReviewBookList 获取书籍审核列表
+func GetReviewBookList(search string, status uint) ([]models.Book, error) {
+	var books []models.Book
+	query := database.DB
+
+	if status != 0 {
+		query = query.Where("status = ?", status)
+	}
+
+	if search != "" {
+		searchPattern := "%" + search + "%"
+		query = query.Where("name LIKE ?", searchPattern).
+			Or("author LIKE ?", searchPattern)
+	}
+
+	result := query.Order("id desc").Find(&books)
+	return books, result.Error
+}

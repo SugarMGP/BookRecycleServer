@@ -41,6 +41,11 @@ func Init(r *gin.Engine) {
 		admin := api.Group("/admin", midwares.Auth(3))
 		{
 			admin.GET("/feedbacks", feedbackController.GetFeedbackList)
+
+			review := admin.Group("/review")
+			{
+				review.GET("/books", bookController.GetReviewBookList)
+			}
 		}
 
 		api.POST("/upload", midwares.Auth(), objectController.UploadFile)
