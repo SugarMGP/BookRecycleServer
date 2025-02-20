@@ -14,6 +14,7 @@ import (
 func Init(r *gin.Engine) {
 	api := r.Group("/api")
 	{
+		// 用户接口
 		user := api.Group("/user")
 		{
 			user.POST("/login", userController.Login)
@@ -21,6 +22,8 @@ func Init(r *gin.Engine) {
 			user.POST("/activate", midwares.Auth(1, 2), userController.Activate)
 			user.GET("/info", midwares.Auth(1, 2), userController.GetUserInfo)
 		}
+
+		// 学生接口
 		student := api.Group("/student", midwares.Auth(1))
 		{
 			market := student.Group("/market")
@@ -33,6 +36,13 @@ func Init(r *gin.Engine) {
 			}
 			student.POST("/feedback", feedbackController.Feedback)
 		}
+
+		// 管理员接口
+		admin := api.Group("/admin", midwares.Auth(3))
+		{
+			admin.GET("/feedbacks", feedbackController.GetFeedbackList)
+		}
+
 		api.POST("/upload", midwares.Auth(), objectController.UploadFile)
 	}
 	r.GET("/ws", ws.HandleWebSocket)
