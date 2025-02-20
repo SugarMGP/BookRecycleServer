@@ -8,6 +8,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type getBookListReq struct {
+	Search string `json:"search"`
+}
+
 type bookListElement struct {
 	ID           uint   `json:"id"`
 	UserID       uint   `json:"user_id"`
@@ -23,7 +27,14 @@ type bookListElement struct {
 
 // GetBookList 获取书籍列表
 func GetBookList(c *gin.Context) {
-	books, err := bookService.GetBookList()
+	var data getBookListReq
+	err := c.ShouldBindJSON(&data)
+	if err != nil {
+		response.AbortWithException(c, apiException.ParamsError, err)
+		return
+	}
+
+	books, err := bookService.GetBookList(data.Search)
 	if err != nil {
 		response.AbortWithException(c, apiException.ServerError, err)
 		return
