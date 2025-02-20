@@ -12,6 +12,7 @@ import (
 
 type uploadBookReq struct {
 	Name         string `json:"name" binding:"required"`
+	Author       string `json:"author" binding:"required"`
 	Course       string `json:"course"`
 	Edition      string `json:"edition"`
 	Publisher    string `json:"publisher" binding:"required"`
@@ -45,6 +46,7 @@ func UploadBook(c *gin.Context) {
 	err = bookService.SaveBook(&models.Book{
 		UserID:       user.ID,
 		Name:         data.Name,
+		Author:       data.Author,
 		Course:       data.Course,
 		Edition:      data.Edition,
 		Publisher:    data.Publisher,
@@ -52,7 +54,7 @@ func UploadBook(c *gin.Context) {
 		Img:          data.Img,
 		Price:        price.StringFixedBank(2),
 		Note:         data.Note,
-		Status:       1,
+		Status:       3,
 	})
 	if err != nil {
 		response.AbortWithException(c, apiException.ServerError, err)

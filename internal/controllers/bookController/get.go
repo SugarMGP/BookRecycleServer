@@ -16,6 +16,7 @@ type bookListElement struct {
 	ID           uint   `json:"id"`
 	UserID       uint   `json:"user_id"`
 	Name         string `json:"name"`
+	Author       string `json:"author"`
 	Course       string `json:"course"`
 	Edition      string `json:"edition"`
 	Publisher    string `json:"publisher"`
@@ -46,6 +47,7 @@ func GetBookList(c *gin.Context) {
 			ID:           book.ID,
 			UserID:       book.UserID,
 			Name:         book.Name,
+			Author:       book.Author,
 			Course:       book.Course,
 			Edition:      book.Edition,
 			Publisher:    book.Publisher,
@@ -64,6 +66,7 @@ func GetBookList(c *gin.Context) {
 type myBookListElement struct {
 	ID           uint   `json:"id"`
 	Name         string `json:"name"`
+	Author       string `json:"author"`
 	Course       string `json:"course"`
 	Edition      string `json:"edition"`
 	Publisher    string `json:"publisher"`
@@ -72,6 +75,7 @@ type myBookListElement struct {
 	Price        string `json:"price"`
 	Note         string `json:"note"`
 	Status       uint   `json:"status"`
+	Reason       string `json:"reason"`
 }
 
 // GetMyBookList 获取我的书籍列表
@@ -93,6 +97,7 @@ func GetMyBookList(c *gin.Context) {
 		bookList = append(bookList, myBookListElement{
 			ID:           book.ID,
 			Name:         book.Name,
+			Author:       book.Author,
 			Course:       book.Course,
 			Edition:      book.Edition,
 			Publisher:    book.Publisher,
@@ -101,6 +106,7 @@ func GetMyBookList(c *gin.Context) {
 			Price:        book.Price,
 			Note:         book.Note,
 			Status:       book.Status,
+			Reason:       book.Reason,
 		})
 	}
 

@@ -15,6 +15,7 @@ import (
 type updateBookReq struct {
 	ID           uint   `json:"id" binding:"required"`
 	Name         string `json:"name" binding:"required"`
+	Author       string `json:"author" binding:"required"`
 	Course       string `json:"course"`
 	Edition      string `json:"edition"`
 	Publisher    string `json:"publisher" binding:"required"`
@@ -64,6 +65,7 @@ func UpdateBook(c *gin.Context) {
 
 	{ // 更新书籍信息
 		book.Name = data.Name
+		book.Author = data.Author
 		book.Course = data.Course
 		book.Edition = data.Edition
 		book.Publisher = data.Publisher

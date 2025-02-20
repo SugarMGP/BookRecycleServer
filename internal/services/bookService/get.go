@@ -12,7 +12,9 @@ func GetBookList(search string) ([]models.Book, error) {
 
 	if search != "" {
 		searchPattern := "%" + search + "%"
-		query = query.Where("name LIKE ? OR course LIKE ?", searchPattern, searchPattern)
+		query = query.Where("name LIKE ?", searchPattern).
+			Or("course LIKE ?", searchPattern).
+			Or("author LIKE ?", searchPattern)
 	}
 
 	result := query.Order("id desc").Find(&books)
