@@ -3,7 +3,7 @@ package userController
 import (
 	"bookrecycle-server/internal/apiException"
 	"bookrecycle-server/internal/services/userService"
-	"bookrecycle-server/internal/utils"
+	"bookrecycle-server/internal/utils/jwt"
 	"bookrecycle-server/internal/utils/response"
 	"github.com/gin-gonic/gin"
 )
@@ -25,15 +25,30 @@ func Activate(c *gin.Context) {
 		return
 	}
 
-	user, err := utils.GetUser(c)
+	// 判断校区信息是否合法
+	if data.Campus > 3 || data.Campus < 1 {
+		response.AbortWithException(c, apiException.ParamsError, nil)
+		return
+	}
+
+	token := c.Request.Header.Get("Authorization")
+	token = token[7:]
+	claims, err := jwt.ParseToken(token)
+	if err != nil {
+		response.AbortWithException(c, apiException.NoAccessPermission, err)
+		return
+	}
+
+	// 获取用户信息
+	user, err := userService.GetUserByID(claims.UserID)
 	if err != nil {
 		response.AbortWithException(c, apiException.ServerError, err)
 		return
 	}
 
-	// 判断校区信息是否合法
-	if data.Campus > 3 || data.Campus < 1 {
-		response.AbortWithException(c, apiException.ParamsError, nil)
+	// 判断用户类型
+	if user.Type != 1 && user.Type != 2 {
+		response.AbortWithException(c, apiException.NoAccessPermission, nil)
 		return
 	}
 

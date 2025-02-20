@@ -19,7 +19,7 @@ func Init(r *gin.Engine) {
 		{
 			user.POST("/login", userController.Login)
 			user.POST("/register", userController.Register)
-			user.POST("/activate", midwares.Auth(1, 2), userController.Activate)
+			user.POST("/activate", userController.Activate)
 			user.GET("/info", midwares.Auth(1, 2), userController.GetUserInfo)
 		}
 
