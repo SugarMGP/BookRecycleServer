@@ -1,8 +1,6 @@
 package midwares
 
 import (
-	"errors"
-
 	"bookrecycle-server/internal/apiException"
 	"bookrecycle-server/internal/services/userService"
 	"bookrecycle-server/internal/utils/jwt"
@@ -22,10 +20,6 @@ func Auth(usertype ...uint) gin.HandlerFunc {
 
 		token = token[7:] // 去除 Bearer
 		claims, err := jwt.ParseToken(token)
-		if errors.Is(err, jwt.ErrTokenHandlingFailed) {
-			response.AbortWithException(c, apiException.ServerError, err)
-			return
-		}
 		if err != nil {
 			response.AbortWithException(c, apiException.NoAccessPermission, err)
 			return

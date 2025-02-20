@@ -1,17 +1,16 @@
 package ws
 
 import (
-	"bookrecycle-server/internal/services/userService"
-	"bookrecycle-server/internal/utils/jwt"
 	"encoding/json"
 	"net/http"
 	"sync"
 	"sync/atomic"
-	"time"
 
 	"bookrecycle-server/internal/apiException"
 	"bookrecycle-server/internal/models"
 	"bookrecycle-server/internal/services/messageService"
+	"bookrecycle-server/internal/services/userService"
+	"bookrecycle-server/internal/utils/jwt"
 	"bookrecycle-server/internal/utils/response"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
@@ -36,12 +35,6 @@ type ConnectionManager struct {
 	stop        atomic.Bool
 }
 
-type messageResp struct {
-	models.Message
-	SenderName   string `json:"sender_name"`
-	ReceiverName string `json:"receiver_name"`
-}
-
 func (cm *ConnectionManager) handleMessage(message *models.Message) {
 	// 保存消息到数据库
 	if err := messageService.SaveMessage(message); err != nil {
@@ -54,25 +47,9 @@ func (cm *ConnectionManager) handleMessage(message *models.Message) {
 	senderConn, senderExists := cm.connections[message.Sender]
 	cm.mutex.RUnlock()
 
-	sender, err := userService.GetUserByID(message.Sender)
-	if err != nil {
-		zap.L().Warn("Error get user from database", zap.Error(err))
-		return
-	}
-
-	receiver, err := userService.GetUserByID(message.Receiver)
-	if err != nil {
-		zap.L().Warn("Error get user from database", zap.Error(err))
-		return
-	}
-	resp := messageResp{
-		*message,
-		sender.Name,
-		receiver.Name,
-	}
 	// 发送给接收者
 	if exists {
-		if err := receiverConn.WriteJSON(resp); err != nil {
+		if err := receiverConn.WriteJSON(message); err != nil {
 			zap.L().Warn("Error writing message", zap.Error(err))
 			_ = receiverConn.Close()
 			cm.unregisterConnection(message.Receiver)
@@ -81,7 +58,7 @@ func (cm *ConnectionManager) handleMessage(message *models.Message) {
 
 	// 发送给自己
 	if senderExists {
-		if err := senderConn.WriteJSON(resp); err != nil {
+		if err := senderConn.WriteJSON(message); err != nil {
 			zap.L().Warn("Error writing message", zap.Error(err))
 			_ = senderConn.Close()
 			cm.unregisterConnection(message.Sender)
@@ -101,23 +78,7 @@ func (cm *ConnectionManager) registerConnection(conn *websocket.Conn, uid uint) 
 	cm.connections[uid] = conn
 	cm.mutex.Unlock()
 	for _, msg := range messages {
-		sender, err := userService.GetUserByID(msg.Sender)
-		if err != nil {
-			zap.L().Warn("Error get user from database", zap.Error(err))
-			continue
-		}
-
-		receiver, err := userService.GetUserByID(msg.Receiver)
-		if err != nil {
-			zap.L().Warn("Error get user from database", zap.Error(err))
-			continue
-		}
-		resp := messageResp{
-			msg,
-			sender.Name,
-			receiver.Name,
-		}
-		if err := conn.WriteJSON(resp); err != nil {
+		if err := conn.WriteJSON(msg); err != nil {
 			zap.L().Warn("Error sending history message", zap.Error(err))
 		}
 	}
@@ -164,10 +125,11 @@ func HandleWebSocket(c *gin.Context) {
 	token := c.Query("token")
 	claims, err := jwt.ParseToken(token)
 	if err != nil {
-		response.AbortWithException(c, apiException.ServerError, err)
+		response.AbortWithException(c, apiException.NoAccessPermission, err)
 		return
 	}
-	userid := claims.UserID
+
+	uid := claims.UserID
 	conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
 		response.AbortWithException(c, apiException.WebSocketError, err)
@@ -180,11 +142,11 @@ func HandleWebSocket(c *gin.Context) {
 		}
 	}(conn)
 
-	cm.registerConnection(conn, userid)
+	cm.registerConnection(conn, uid)
 	for {
 		msgType, msg, err := conn.ReadMessage()
 		if err != nil {
-			cm.unregisterConnection(userid)
+			cm.unregisterConnection(uid)
 			break
 		}
 
@@ -196,12 +158,25 @@ func HandleWebSocket(c *gin.Context) {
 			}
 
 			// 填充信息
-			message.Sender = userid
-			message.CreatedAt = time.Now()
-
+			message.Sender = uid
 			if message.Sender == message.Receiver {
 				continue
 			}
+
+			// 填充用户信息
+			sender, err := userService.GetUserByID(message.Sender)
+			if err != nil {
+				response.AbortWithException(c, apiException.ServerError, err)
+				return
+			}
+			message.SenderName = sender.Name
+
+			receiver, err := userService.GetUserByID(message.Receiver)
+			if err != nil {
+				response.AbortWithException(c, apiException.ServerError, err)
+				return
+			}
+			message.ReceiverName = receiver.Name
 
 			cm.userChannel <- message
 		}
