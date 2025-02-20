@@ -3,6 +3,7 @@ package midwares
 import (
 	"bookrecycle-server/internal/apiException"
 	"bookrecycle-server/internal/services/userService"
+	"bookrecycle-server/internal/utils"
 	"bookrecycle-server/internal/utils/jwt"
 	"bookrecycle-server/internal/utils/response"
 	"github.com/gin-gonic/gin"
@@ -55,4 +56,36 @@ func Auth(usertype ...uint) gin.HandlerFunc {
 		c.Set("user", user)
 		c.Next()
 	}
+}
+
+// AuthReviewBooks 书籍审核权限检查
+func AuthReviewBooks(c *gin.Context) {
+	user, err := utils.GetUser(c)
+	if err != nil {
+		response.AbortWithException(c, apiException.ServerError, err)
+		return
+	}
+
+	if !user.CanReviewBooks {
+		response.AbortWithException(c, apiException.NoAccessPermission, nil)
+		return
+	}
+
+	c.Next()
+}
+
+// AuthManageReports 举报管理权限检查
+func AuthManageReports(c *gin.Context) {
+	user, err := utils.GetUser(c)
+	if err != nil {
+		response.AbortWithException(c, apiException.ServerError, err)
+		return
+	}
+
+	if !user.CanManageReports {
+		response.AbortWithException(c, apiException.NoAccessPermission, nil)
+		return
+	}
+
+	c.Next()
 }

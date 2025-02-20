@@ -16,4 +16,7 @@ type User struct {
 	Phone     string // 联系电话
 	Campus    uint   // 校区
 	Address   string // 地址
+
+	CanReviewBooks   bool // 书籍审核权限
+	CanManageReports bool // 举报处理权限
 }

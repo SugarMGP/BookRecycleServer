@@ -42,7 +42,7 @@ func Init(r *gin.Engine) {
 		{
 			admin.GET("/feedbacks", feedbackController.GetFeedbackList)
 
-			review := admin.Group("/review")
+			review := admin.Group("/review", midwares.AuthReviewBooks)
 			{
 				review.GET("/books", bookController.GetReviewBookList)
 			}
