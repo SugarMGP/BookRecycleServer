@@ -17,6 +17,8 @@ type User struct {
 	Campus    uint   // 校区
 	Address   string // 地址
 
+	CurrentOrder uint // 当前回收订单编号
+
 	CanReviewBooks   bool // 书籍审核权限
 	CanManageReports bool // 举报处理权限
 }

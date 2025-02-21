@@ -34,7 +34,7 @@ func Feedback(c *gin.Context) {
 		uid = 0
 	}
 
-	err = feedbackService.CreateFeedback(&models.Feedback{
+	err = feedbackService.SaveFeedback(&models.Feedback{
 		Content: data.Content,
 		UserID:  uid,
 	})

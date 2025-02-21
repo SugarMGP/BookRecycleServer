@@ -34,7 +34,7 @@ func Auth(usertype ...uint) gin.HandlerFunc {
 		}
 
 		if !user.Activated {
-			response.AbortWithException(c, apiException.NoAccessPermission, nil)
+			response.AbortWithException(c, apiException.UserNotActive, nil)
 			return
 		}
 

@@ -4,6 +4,7 @@ import (
 	"bookrecycle-server/internal/controllers/bookController"
 	"bookrecycle-server/internal/controllers/feedbackController"
 	"bookrecycle-server/internal/controllers/objectController"
+	"bookrecycle-server/internal/controllers/recycleController"
 	"bookrecycle-server/internal/controllers/userController"
 	"bookrecycle-server/internal/midwares"
 	"bookrecycle-server/pkg/ws"
@@ -34,7 +35,17 @@ func Init(r *gin.Engine) {
 				market.PUT("/book", bookController.UpdateBook)
 				market.DELETE("/book", bookController.DeleteBook)
 			}
+			student.GET("/recycle", recycleController.GetRecycleStatus)
+			student.POST("/recycle", recycleController.UploadRecycle)
 			student.POST("/feedback", feedbackController.Feedback)
+		}
+
+		// 收书员接口
+		receiver := api.Group("/receiver", midwares.Auth(2))
+		{
+			receiver.POST("/order", recycleController.PickRecycle)
+			receiver.PUT("/order", recycleController.PutRecycleInfo)
+			receiver.POST("/settle", recycleController.SettleRecycle)
 		}
 
 		// 管理员接口

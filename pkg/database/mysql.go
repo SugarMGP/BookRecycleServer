@@ -50,5 +50,6 @@ func autoMigrate(db *gorm.DB) error {
 		&models.Message{},
 		&models.Book{},
 		&models.Feedback{},
+		&models.Recycle{},
 	)
 }

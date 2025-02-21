@@ -24,9 +24,10 @@ var (
 	NoAccessPermission      = NewError(200506, log.LevelInfo, "无访问权限")
 	WebSocketError          = NewError(200507, log.LevelWarn, "WebSocket连接错误")
 	FileSizeExceedError     = NewError(200508, log.LevelInfo, "文件大小超限")
-	UploadFileError         = NewError(200509, log.LevelError, "上传文件失败")
+	UploadFileError         = NewError(200509, log.LevelInfo, "上传文件失败")
 	FileNotImageError       = NewError(200510, log.LevelInfo, "上传的文件不是图片")
 	ResourceNotFound        = NewError(200511, log.LevelInfo, "资源不存在")
+	UserNotActive           = NewError(200512, log.LevelInfo, "用户未激活")
 	NotFound                = NewError(200404, log.LevelWarn, http.StatusText(http.StatusNotFound))
 )
 

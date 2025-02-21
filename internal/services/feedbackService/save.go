@@ -5,8 +5,8 @@ import (
 	"bookrecycle-server/pkg/database"
 )
 
-// CreateFeedback 创建反馈
-func CreateFeedback(feedback *models.Feedback) error {
-	result := database.DB.Create(feedback)
+// SaveFeedback 保存反馈
+func SaveFeedback(feedback *models.Feedback) error {
+	result := database.DB.Save(feedback)
 	return result.Error
 }
