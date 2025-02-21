@@ -46,6 +46,8 @@ func Init(r *gin.Engine) {
 			receiver.POST("/order", recycleController.PickRecycle)
 			receiver.PUT("/order", recycleController.PutRecycleInfo)
 			receiver.POST("/settle", recycleController.SettleRecycle)
+			receiver.GET("/current_order", recycleController.GetCurrentOrder)
+			receiver.GET("/orders", recycleController.GetOrderList)
 		}
 
 		// 管理员接口

@@ -11,10 +11,9 @@ import (
 )
 
 type uploadRecycleReq struct {
-	Img     string  `json:"img" binding:"required"`
-	Note    string  `json:"note"`
-	Address string  `json:"address" binding:"required"`
-	Weight  float64 `json:"weight" binding:"required"`
+	Img    string  `json:"img" binding:"required"`
+	Note   string  `json:"note"`
+	Weight float64 `json:"weight" binding:"required"`
 }
 
 // UploadRecycle 学生提交回收请求
@@ -38,7 +37,7 @@ func UploadRecycle(c *gin.Context) {
 		Img:        data.Img,
 		Note:       data.Note,
 		Weight:     data.Weight,
-		Address:    data.Address,
+		Address:    user.Address,
 		Campus:     user.Campus,
 		Status:     1,
 	}
