@@ -29,7 +29,7 @@ func Init(r *gin.Engine) {
 		{
 			market := student.Group("/market")
 			{
-				market.GET("/products", bookController.GetBookList)
+				market.POST("/products", bookController.GetBookList)
 				market.GET("/books", bookController.GetMyBookList)
 				market.POST("/book", bookController.UploadBook)
 				market.PUT("/book", bookController.UpdateBook)
@@ -57,7 +57,7 @@ func Init(r *gin.Engine) {
 
 			review := admin.Group("/review", midwares.AuthReviewBooks)
 			{
-				review.GET("/books", bookController.GetReviewBookList)
+				review.POST("/books", bookController.GetReviewBookList)
 			}
 		}
 
