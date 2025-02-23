@@ -21,4 +21,7 @@ type User struct {
 
 	CanReviewBooks   bool // 书籍审核权限
 	CanManageReports bool // 举报处理权限
+
+	Balance    string // 余额
+	Reputation uint   // 信誉
 }

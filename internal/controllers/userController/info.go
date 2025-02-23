@@ -1,15 +1,18 @@
 package userController
 
 import (
+	"time"
+
 	"bookrecycle-server/internal/apiException"
+	"bookrecycle-server/internal/services/billService"
 	"bookrecycle-server/internal/utils"
 	"bookrecycle-server/internal/utils/response"
 	"github.com/gin-gonic/gin"
 )
 
 type billElement struct {
-	Date  string `json:"date"`
-	Money string `json:"money"`
+	Time  time.Time `json:"time"`
+	Money string    `json:"money"`
 }
 
 type infoResp struct {
@@ -21,7 +24,7 @@ type infoResp struct {
 	Address    string        `json:"address"`
 	Balance    string        `json:"balance"`
 	Reputation uint          `json:"reputation"`
-	Bill       []billElement `json:"bill"`
+	Bills      []billElement `json:"bills"`
 }
 
 // GetUserInfo 获取用户信息
@@ -32,7 +35,19 @@ func GetUserInfo(c *gin.Context) {
 		return
 	}
 
-	// TODO 钱款相关信息
+	bills := make([]billElement, 0)
+	billList, err := billService.GetBillListByUser(user.ID)
+	if err != nil {
+		response.AbortWithException(c, apiException.ServerError, err)
+		return
+	}
+	for _, bill := range billList {
+		bills = append(bills, billElement{
+			Time:  bill.CreatedAt,
+			Money: bill.Amount,
+		})
+	}
+
 	response.JsonSuccessResp(c, infoResp{
 		ID:         user.ID,
 		Name:       user.Name,
@@ -40,8 +55,8 @@ func GetUserInfo(c *gin.Context) {
 		Phone:      user.Phone,
 		Campus:     user.Campus,
 		Address:    user.Address,
-		Balance:    "",
-		Reputation: 0,
-		Bill:       nil,
+		Balance:    user.Balance,
+		Reputation: user.Reputation,
+		Bills:      bills,
 	})
 }

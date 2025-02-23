@@ -58,6 +58,8 @@ func Activate(c *gin.Context) {
 		user.Name = data.Name
 		user.Phone = data.Phone
 		user.StudentID = data.StudentID
+		user.Reputation = 100
+		user.Balance = "0"
 		user.Activated = true
 	}
 
