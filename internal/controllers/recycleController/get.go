@@ -82,7 +82,7 @@ func GetCurrentOrder(c *gin.Context) {
 
 	resp.ID = user.CurrentOrder
 	if user.CurrentOrder == 0 {
-		response.JsonSuccessResp(c, resp)
+		response.JsonSuccessResp(c, nil)
 		return
 	}
 
