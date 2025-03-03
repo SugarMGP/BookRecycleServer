@@ -56,7 +56,7 @@ func Init(r *gin.Engine) {
 		admin := api.Group("/admin", midwares.Auth(3))
 		{
 			admin.GET("/feedbacks", feedbackController.GetFeedbackList)
-
+			admin.GET("/withdrawal", cashController.GetWithdrawalList)
 			review := admin.Group("/review")
 			{
 				review.POST("/books", bookController.GetReviewBookList)
