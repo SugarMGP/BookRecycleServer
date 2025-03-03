@@ -33,7 +33,7 @@ func Auth(usertype ...uint) gin.HandlerFunc {
 			return
 		}
 
-		if !user.Activated {
+		if !user.Activated && user.Type != 3 {
 			response.AbortWithException(c, apiException.UserNotActive, nil)
 			return
 		}

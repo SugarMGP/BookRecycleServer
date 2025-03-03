@@ -31,7 +31,7 @@ type reviewBookListElement struct {
 // GetReviewBookList 获取书籍审核列表
 func GetReviewBookList(c *gin.Context) {
 	var data getReviewBookListReq
-	err := c.ShouldBindJSON(&data)
+	err := c.ShouldBind(&data)
 	if err != nil {
 		response.AbortWithException(c, apiException.ParamsError, err)
 		return

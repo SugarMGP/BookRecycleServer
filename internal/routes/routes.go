@@ -2,6 +2,7 @@ package routes
 
 import (
 	"bookrecycle-server/internal/controllers/bookController"
+	"bookrecycle-server/internal/controllers/cashController"
 	"bookrecycle-server/internal/controllers/feedbackController"
 	"bookrecycle-server/internal/controllers/objectController"
 	"bookrecycle-server/internal/controllers/recycleController"
@@ -22,6 +23,7 @@ func Init(r *gin.Engine) {
 			user.POST("/register", userController.Register)
 			user.POST("/activate", userController.Activate)
 			user.GET("/info", midwares.Auth(1, 2), userController.GetUserInfo)
+			user.POST("/withdrawal", midwares.Auth(1, 2), cashController.Withdrawal)
 		}
 
 		// 学生接口
@@ -55,7 +57,7 @@ func Init(r *gin.Engine) {
 		{
 			admin.GET("/feedbacks", feedbackController.GetFeedbackList)
 
-			review := admin.Group("/review", midwares.AuthReviewBooks)
+			review := admin.Group("/review")
 			{
 				review.POST("/books", bookController.GetReviewBookList)
 			}
