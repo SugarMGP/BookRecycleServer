@@ -66,3 +66,36 @@ func GetReviewBookList(c *gin.Context) {
 		"review_book_list": bookList,
 	})
 }
+
+type updateReviewStatusReq struct {
+	ID     uint   `json:"id" binding:"required"`
+	Status uint   `json:"status" binding:"required"`
+	Reason string `json:"reason"`
+}
+
+// UpdateReviewStatus 更新书籍审核状态
+func UpdateReviewStatus(c *gin.Context) {
+	var data updateReviewStatusReq
+	err := c.ShouldBindJSON(&data)
+	if err != nil {
+		response.AbortWithException(c, apiException.ParamsError, err)
+		return
+	}
+
+	if data.Status != 1 && data.Status != 4 {
+		response.AbortWithException(c, apiException.ParamsError, nil)
+		return
+	}
+
+	book, err := bookService.GetBookByID(data.ID)
+	book.Status = data.Status
+	book.Reason = data.Reason
+
+	err = bookService.SaveBook(book)
+	if err != nil {
+		response.AbortWithException(c, apiException.ServerError, err)
+		return
+	}
+
+	response.JsonSuccessResp(c, nil)
+}

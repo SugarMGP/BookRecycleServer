@@ -60,6 +60,7 @@ func Init(r *gin.Engine) {
 			review := admin.Group("/review")
 			{
 				review.POST("/books", bookController.GetReviewBookList)
+				review.PUT("/update", bookController.UpdateReviewStatus)
 			}
 		}
 
