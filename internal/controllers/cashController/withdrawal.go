@@ -12,6 +12,7 @@ type withdrawalReq struct {
 	Amount float64 `json:"amount"`
 }
 
+// Withdrawal 提现接口
 func Withdrawal(c *gin.Context) {
 	var req withdrawalReq
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -30,6 +31,7 @@ func Withdrawal(c *gin.Context) {
 	response.JsonSuccessResp(c, nil)
 }
 
+// GetWithdrawalList 获取提现记录
 func GetWithdrawalList(c *gin.Context) {
 	withdrawalList, err := cashService.GetWithdrawalList()
 	if err != nil {

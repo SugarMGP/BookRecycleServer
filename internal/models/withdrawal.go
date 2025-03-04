@@ -2,6 +2,7 @@ package models
 
 import "gorm.io/gorm"
 
+// Withdrawal 提现记录
 type Withdrawal struct {
 	gorm.Model
 
