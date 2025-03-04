@@ -1,10 +1,10 @@
 package models
 
-import "gorm.io/gorm"
+import "time"
 
 // Book 书籍
 type Book struct {
-	gorm.Model
+	ID           uint
 	UserID       uint
 	Name         string // 书名
 	Author       string // 作者
@@ -15,6 +15,8 @@ type Book struct {
 	Img          string // 图片
 	Price        string // 价格
 	Note         string // 备注
-	Status       uint   // 状态 1已上架 2已售出 3待审核 4审核不通过
+	Status       uint   // 状态 1已上架 2已下架 3待审核 4审核不通过
 	Reason       string // 审核不通过原因
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
 }

@@ -46,7 +46,8 @@ func DeleteBook(c *gin.Context) {
 		return
 	}
 
-	err = bookService.DeleteBook(data.ID)
+	book.Status = 2
+	err = bookService.SaveBook(book)
 	if err != nil {
 		response.AbortWithException(c, apiException.ServerError, err)
 		return

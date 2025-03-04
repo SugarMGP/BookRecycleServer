@@ -29,6 +29,7 @@ var (
 	ResourceNotFound        = NewError(200511, log.LevelInfo, "资源不存在")
 	UserNotActive           = NewError(200512, log.LevelInfo, "用户未激活")
 	BalanceNotEnough        = NewError(200513, log.LevelInfo, "余额不足")
+	BookIsOff               = NewError(200514, log.LevelInfo, "书籍已下架")
 	NotFound                = NewError(200404, log.LevelWarn, http.StatusText(http.StatusNotFound))
 )
 

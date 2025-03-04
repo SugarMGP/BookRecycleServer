@@ -63,6 +63,11 @@ func UpdateBook(c *gin.Context) {
 		return
 	}
 
+	if book.Status == 2 {
+		response.AbortWithException(c, apiException.BookIsOff, nil)
+		return
+	}
+
 	{ // 更新书籍信息
 		book.Name = data.Name
 		book.Author = data.Author

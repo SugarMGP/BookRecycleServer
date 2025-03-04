@@ -6,6 +6,7 @@ import (
 	"bookrecycle-server/internal/controllers/feedbackController"
 	"bookrecycle-server/internal/controllers/objectController"
 	"bookrecycle-server/internal/controllers/recycleController"
+	"bookrecycle-server/internal/controllers/reportController"
 	"bookrecycle-server/internal/controllers/userController"
 	"bookrecycle-server/internal/midwares"
 	"bookrecycle-server/pkg/ws"
@@ -36,6 +37,7 @@ func Init(r *gin.Engine) {
 				market.POST("/book", bookController.UploadBook)
 				market.PUT("/book", bookController.UpdateBook)
 				market.DELETE("/book", bookController.DeleteBook)
+				market.POST("/report", reportController.NewReport)
 			}
 			student.GET("/recycle", recycleController.GetRecycleStatus)
 			student.POST("/recycle", recycleController.UploadRecycle)
@@ -61,6 +63,10 @@ func Init(r *gin.Engine) {
 			{
 				review.POST("/books", bookController.GetReviewBookList)
 				review.PUT("/update", bookController.UpdateReviewStatus)
+			}
+			report := admin.Group("/report")
+			{
+				report.GET("/list", reportController.GetReportList)
 			}
 		}
 
