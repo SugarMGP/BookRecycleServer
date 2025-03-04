@@ -14,3 +14,10 @@ func GetReportList() ([]models.Report, error) {
 		Find(&reports)
 	return reports, result.Error
 }
+
+// GetReportByID 根据ID获取举报
+func GetReportByID(id uint) (*models.Report, error) {
+	var report models.Report
+	result := database.DB.Where("id = ?", id).First(&report)
+	return &report, result.Error
+}

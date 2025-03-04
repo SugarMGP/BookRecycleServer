@@ -67,6 +67,8 @@ func Init(r *gin.Engine) {
 			report := admin.Group("/report")
 			{
 				report.GET("/list", reportController.GetReportList)
+				report.POST("/pass", reportController.PassReport)
+				report.POST("/undo", reportController.UndoReport)
 			}
 		}
 
