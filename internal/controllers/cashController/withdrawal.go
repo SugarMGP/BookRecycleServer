@@ -6,10 +6,11 @@ import (
 	"bookrecycle-server/internal/utils"
 	"bookrecycle-server/internal/utils/response"
 	"github.com/gin-gonic/gin"
+	"github.com/shopspring/decimal"
 )
 
 type withdrawalReq struct {
-	Amount float64 `json:"amount"`
+	Amount float64 `json:"amount" binding:"required"`
 }
 
 // Withdrawal 提现接口
@@ -19,12 +20,22 @@ func Withdrawal(c *gin.Context) {
 		response.AbortWithException(c, apiException.ParamsError, err)
 		return
 	}
+
 	user, err := utils.GetUser(c)
 	if err != nil {
 		response.AbortWithException(c, apiException.ServerError, err)
 		return
 	}
-	if err = cashService.Withdrawal(user.ID, req.Amount); err != nil {
+
+	balance, _ := decimal.NewFromString(user.Balance)
+	cash := decimal.NewFromFloat(req.Amount).Abs()
+	newBalance := balance.Sub(cash)
+	if newBalance.IsNegative() {
+		response.AbortWithException(c, apiException.BalanceNotEnough, nil)
+		return
+	}
+
+	if err = cashService.Withdrawal(user, newBalance, cash); err != nil {
 		response.AbortWithException(c, apiException.ServerError, err)
 		return
 	}
@@ -38,5 +49,7 @@ func GetWithdrawalList(c *gin.Context) {
 		response.AbortWithException(c, apiException.ServerError, err)
 		return
 	}
-	response.JsonSuccessResp(c, withdrawalList)
+	response.JsonSuccessResp(c, gin.H{
+		"withdrawal_list": withdrawalList,
+	})
 }
