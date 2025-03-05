@@ -10,13 +10,13 @@ import (
 )
 
 type reportListElement struct {
-	ID           uint      `json:"id"`
-	ReporterName string    `json:"reporter_name"`
-	SellerName   string    `json:"seller_name"`
-	BookName     string    `json:"book_name"`
-	Status       uint      `json:"status"`
-	Title        string    `json:"title"`
-	CreatedAt    time.Time `json:"created_at"`
+	ID           uint   `json:"id"`
+	ReporterName string `json:"reporter_name"`
+	SellerName   string `json:"seller_name"`
+	BookName     string `json:"book_name"`
+	Status       uint   `json:"status"`
+	Title        string `json:"title"`
+	CreatedAt    string `json:"created_at"`
 }
 
 // GetReportList 管理员获取举报列表
@@ -36,7 +36,7 @@ func GetReportList(c *gin.Context) {
 			BookName:     report.BookName,
 			Status:       report.Status,
 			Title:        report.Title,
-			CreatedAt:    report.CreatedAt,
+			CreatedAt:    report.CreatedAt.Format(time.DateTime),
 		})
 	}
 

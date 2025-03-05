@@ -11,8 +11,8 @@ import (
 )
 
 type billElement struct {
-	Time  time.Time `json:"time"`
-	Money string    `json:"money"`
+	Time  string `json:"time"`
+	Money string `json:"money"`
 }
 
 type infoResp struct {
@@ -43,7 +43,7 @@ func GetUserInfo(c *gin.Context) {
 	}
 	for _, bill := range billList {
 		bills = append(bills, billElement{
-			Time:  bill.CreatedAt,
+			Time:  bill.CreatedAt.Format(time.DateTime),
 			Money: bill.Amount,
 		})
 	}

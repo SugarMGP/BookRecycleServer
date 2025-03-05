@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"sync"
 	"sync/atomic"
+	"time"
 
 	"bookrecycle-server/internal/apiException"
 	"bookrecycle-server/internal/models"
@@ -158,6 +159,7 @@ func HandleWebSocket(c *gin.Context) {
 			}
 
 			// 填充信息
+			message.Time = time.Now().Format(time.DateTime)
 			message.Sender = uid
 			if message.Sender == message.Receiver {
 				continue

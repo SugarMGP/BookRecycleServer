@@ -60,14 +60,14 @@ func GetRecycleStatus(c *gin.Context) {
 }
 
 type getCurrentOrderResp struct {
-	ID          uint      `json:"id"`
-	SellerName  string    `json:"seller_name"`
-	SellerPhone string    `json:"seller_phone"`
-	Weight      float64   `json:"weight"`
-	Address     string    `json:"address"`
-	Note        string    `json:"note"`
-	Img         string    `json:"img"`
-	CreatedAt   time.Time `json:"created_at"`
+	ID          uint    `json:"id"`
+	SellerName  string  `json:"seller_name"`
+	SellerPhone string  `json:"seller_phone"`
+	Weight      float64 `json:"weight"`
+	Address     string  `json:"address"`
+	Note        string  `json:"note"`
+	Img         string  `json:"img"`
+	CreatedAt   string  `json:"created_at"`
 }
 
 // GetCurrentOrder 收书员获取当前订单
@@ -94,7 +94,7 @@ func GetCurrentOrder(c *gin.Context) {
 
 	resp.Img = order.Img
 	resp.Address = order.Address
-	resp.CreatedAt = order.CreatedAt
+	resp.CreatedAt = order.CreatedAt.Format(time.DateTime)
 	resp.Note = order.Note
 	resp.Weight = order.Weight
 	resp.SellerName = order.SellerName
@@ -110,13 +110,13 @@ func GetCurrentOrder(c *gin.Context) {
 }
 
 type orderListElement struct {
-	ID         uint      `json:"id"`
-	SellerName string    `json:"seller_name"`
-	Weight     float64   `json:"weight"`
-	Address    string    `json:"address"`
-	Note       string    `json:"note"`
-	Img        string    `json:"img"`
-	CreatedAt  time.Time `json:"created_at"`
+	ID         uint    `json:"id"`
+	SellerName string  `json:"seller_name"`
+	Weight     float64 `json:"weight"`
+	Address    string  `json:"address"`
+	Note       string  `json:"note"`
+	Img        string  `json:"img"`
+	CreatedAt  string  `json:"created_at"`
 }
 
 // GetOrderList 收书员获取列表
@@ -142,7 +142,7 @@ func GetOrderList(c *gin.Context) {
 			Address:    order.Address,
 			Note:       order.Note,
 			Img:        order.Img,
-			CreatedAt:  order.CreatedAt,
+			CreatedAt:  order.CreatedAt.Format(time.DateTime),
 		})
 	}
 
