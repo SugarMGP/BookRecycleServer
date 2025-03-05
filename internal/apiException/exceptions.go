@@ -30,6 +30,8 @@ var (
 	UserNotActive           = NewError(200512, log.LevelInfo, "用户未激活")
 	BalanceNotEnough        = NewError(200513, log.LevelInfo, "余额不足")
 	BookIsOff               = NewError(200514, log.LevelInfo, "书籍已下架")
+	CaptchaError            = NewError(200515, log.LevelError, "验证码生成错误")
+	CaptchaTimeout          = NewError(200516, log.LevelInfo, "验证码已过期")
 	NotFound                = NewError(200404, log.LevelWarn, http.StatusText(http.StatusNotFound))
 )
 

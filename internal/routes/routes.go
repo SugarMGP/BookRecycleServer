@@ -2,6 +2,7 @@ package routes
 
 import (
 	"bookrecycle-server/internal/controllers/bookController"
+	"bookrecycle-server/internal/controllers/captchaController"
 	"bookrecycle-server/internal/controllers/cashController"
 	"bookrecycle-server/internal/controllers/feedbackController"
 	"bookrecycle-server/internal/controllers/objectController"
@@ -73,6 +74,10 @@ func Init(r *gin.Engine) {
 		}
 
 		api.POST("/upload", midwares.Auth(), objectController.UploadFile)
+
+		// 验证码接口
+		api.GET("/captcha", captchaController.GetCaptcha)
+		api.POST("/captcha", captchaController.CheckCaptcha)
 	}
 	r.GET("/ws", ws.HandleWebSocket)
 }

@@ -6,6 +6,7 @@ import (
 	"bookrecycle-server/internal/midwares"
 	"bookrecycle-server/internal/routes"
 	"bookrecycle-server/internal/utils/server"
+	"bookrecycle-server/pkg/captcha"
 	"bookrecycle-server/pkg/config"
 	"bookrecycle-server/pkg/database"
 	"bookrecycle-server/pkg/log"
@@ -32,6 +33,7 @@ func main() {
 	r.NoRoute(midwares.HandleNotFound)
 	log.Init()
 	database.Init()
+	captcha.Init()
 	ws.Init()
 	routes.Init(r)
 

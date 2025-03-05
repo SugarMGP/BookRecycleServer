@@ -11,9 +11,12 @@ require (
 	github.com/gin-gonic/gin v1.10.0
 	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/gorilla/websocket v1.5.3
+	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/satori/go.uuid v1.2.0
 	github.com/shopspring/decimal v1.4.0
 	github.com/spf13/viper v1.19.0
+	github.com/wenlng/go-captcha-assets v1.0.5
+	github.com/wenlng/go-captcha/v2 v2.0.3
 	github.com/zjutjh/WeJH-SDK v0.2.1
 	go.uber.org/zap v1.27.0
 	golang.org/x/image v0.24.0
@@ -34,6 +37,7 @@ require (
 	github.com/go-playground/validator/v10 v10.24.0 // indirect
 	github.com/go-sql-driver/mysql v1.8.1 // indirect
 	github.com/goccy/go-json v0.10.5 // indirect
+	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
