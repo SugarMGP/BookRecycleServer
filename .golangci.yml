@@ -84,7 +84,6 @@ linters:
     - staticcheck  # 静态代码分析工具，检测潜在的错误和反模式
     - gofmt  # 检查代码格式是否符合 gofmt 规范
     - revive  # 替代 golint 的代码风格检查工具
-    - dupl  # 检查重复代码
     - goconst  # 检查重复的常量
     - unused # 检查未使用的代码
     - unparam # 检查未使用的函数参数

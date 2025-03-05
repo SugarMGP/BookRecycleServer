@@ -33,21 +33,24 @@ func PassReport(c *gin.Context) {
 		return
 	}
 
+	// 如果举报未通过，则降低用户信誉值
+	if report.Status != 3 {
+		user, err := userService.GetUserByID(report.Seller)
+		if err != nil {
+			response.AbortWithException(c, apiException.ServerError, err)
+			return
+		}
+
+		user.Reputation -= 25
+		err = userService.SaveUser(user)
+		if err != nil {
+			response.AbortWithException(c, apiException.ServerError, err)
+			return
+		}
+	}
+
 	report.Status = 3
 	err = reportService.SaveReport(report)
-	if err != nil {
-		response.AbortWithException(c, apiException.ServerError, err)
-		return
-	}
-
-	user, err := userService.GetUserByID(report.Seller)
-	if err != nil {
-		response.AbortWithException(c, apiException.ServerError, err)
-		return
-	}
-
-	user.Reputation -= 25
-	err = userService.SaveUser(user)
 	if err != nil {
 		response.AbortWithException(c, apiException.ServerError, err)
 		return
